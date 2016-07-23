@@ -81,7 +81,7 @@ We want to find `p` and `q` such that ```p / q = ratio``` and `p` and `q` are as
 We let the precision of the ratio be `eps`
 For example, if we want the accumulated error on the ratio at the last image to be 1 or less, the ```eps = 1/num```
 To find p and q, we simply choose p as low as possible (start with 1 and then raise), find the best q, and compute the error.
-
+We know that at worst `p` will be equal to `frac`, since ```ratio = frac / num```
 
 Depending on the size of the picture and the number of tiles, `p` can still be quite big. Then when finding a window, we may want to use the actual size of the tiles.
 That makes lots of unnecessary computations. If `p` is small enough, and the requested images too, then we don't need to correct at all, and can directly consider the tiles have the *expected size*
