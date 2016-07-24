@@ -68,6 +68,8 @@ It also depends if the number of image is important, or if it is important or no
 
 ## How is it done
 
+### Cut
+
 We want `num` tiles of size `size`.
 Actually, we want the tiles to have integer size with the average equal to `size`.
 So we want `frac` images of size ```isize + 1``` and ```num - frac``` images of size ```isize```, with ```isize = floor(size)```.
@@ -85,4 +87,36 @@ We know that at worst `p` will be equal to `frac`, since ```ratio = frac / num``
 
 Depending on the size of the picture and the number of tiles, `p` can still be quite big. Then when finding a window, we may want to use the actual size of the tiles.
 That makes lots of unnecessary computations. If `p` is small enough, and the requested images too, then we don't need to correct at all, and can directly consider the tiles have the *expected size*
+
+### stitch
+
+We want to find the position x. We know that for every `q` pictures, the size average of the windows is exact (with an accumulated error < 1, so it disappears when taking floor.
+
+The expected 'real' tile-position of the point x is ` x / avg `, where `avg = total size / num of tiles` .
+So, if all the tiles had the expected size, the the point x would be in `ix = int(x/avg)`
+
+The real position of the beginning of the tile `ix` is `pos' = (ix // q) * avg + (tile_size+1) * min(p,p') + max(p'-p,0)*tile_size`
+so the error is `err = pos'-x` .
+
+If `err > 0` then the chosen tile is actually after so we should choose a smaller `ix` and compute the error again
+If `err < 0` and `abs(err) > tile_size` then the chosen `ix` is too small, and x is actually in the next tile. So we chose `ix+=1` and compute the error again
+If `err < 0` and `abs(err) < tile_size` then it's ok
+
+We need to do this for the starting and the finishing tile. Using the size instead of the finishing tile is a bad idea because the counting doesn't start at a complete cycle.
+
+> Note : could (should?) use the actual size average on one cycle instead of `avg`
+
+> Note : Should first implement the 'optimist' method and the 'correct' one separately, but there are actually many common points.
+
+> Note : Depending on the choice of the ratio, we might have to compute again once or many times. But I am confident that it will never be needed to loop too long
+> In particular, it is sure that the number of iteration needed is lower than if we naively looped over all tiles position until we find the one containing x (proof ?)
+
+Note :
+
+1. for the wished precision of the fraction, what I do now is 1/total num of pictures
+If I want the total accumulated error on the fraction to be 1 at most, then I want an error of `1/number of cycle`, with `number of cycle = `num of tiles // q` (`q` is still the length of one cycle)
+It gives me a higer tolearance for the fraction, wich should give smaller fractions and therefore a more balanced . And it also ensure that the error due to fraction error is less than one at any time, so it will not influence the integer position.
+Another solution to have even higher tolerance for the fraction would be to have an error < 1 for each cycle! But that would require to be more careful, since the accumulated error can get quite big. So when stitching, we would have to take it into account.
+
+2. Currently, my lowest fraction tries to have the smallest `p` as possible. I actually want the smallest cycle possible, so I should rather get the smallest `q` as possible. Most of the time (all the time ?) it will give the same result.
 
