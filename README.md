@@ -1,3 +1,13 @@
+
+Reorganize the README :
+
+Title
+one sentence explanation
+Longer description
+use case
+detail on how to use the package
+detail about implemetation
+
 # Mozaic
 
 **Cut big pictures in small pieces and only load specific parts.**
@@ -13,13 +23,15 @@ And loading a *big* picture in memory, simply for using a small part of it is qu
 
 <br>
 
-So instead, I propose to use a **mozaic** !
+So instead, I suggest to use a **mozaic** !
 You cut your big images into multiple tiles. A mozaic is simply a matrix of images.
 The size and position of each tile is known, so instead of loading the whole picture, you simply load the tiles composing the image you requested and stitch them!
 
 *Note : it is not guaranteed to be more efficient. Finding the tiles, loading them and stitching them may actually take more than simply loading a big picture, especially if the tiles are too small compared to the image requested.*
 *But if you know in advance the application and can chose a good size for the tiles, I think it should be a bit faster*
 
+
+< find and describe some possible use case : houses on a map, stars, etc...>
 
 # Some details
 
@@ -120,3 +132,19 @@ Another solution to have even higher tolerance for the fraction would be to have
 
 2. Currently, my lowest fraction tries to have the smallest `p` as possible. I actually want the smallest cycle possible, so I should rather get the smallest `q` as possible. Most of the time (all the time ?) it will give the same result.
 
+
+
+Note :
+
+Cool stuff to try :
+
+* Depending on hardware, could gain a lot by parallelism
+* Implementations in C++,
+* CLI interface
+* Libraries interfaces
+* Server/Client architecture to easily provide cross language interface
+* functional implementation in Haskell
+* implementation in Go (concurrent, goroutines)
+
+* Automatic 'clever' grid (seems too hard for not so much improvement ?)
+*
