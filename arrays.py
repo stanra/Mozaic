@@ -52,7 +52,6 @@ def cut(picture, param_x, param_y, mode, fixed_size):
 
 def stitch(mozaic, info, top_left, down_right, fixed_size):
 
-    # V1 : consider all tile have same size --> it is faster.
     if fixed_size:
         top_left_tile = tuple(tile // size for tile, size in zip(top_left, info['tile_size']))
         down_right_tile = tuple(tile // size for tile, size in zip(down_right, info['tile_size']))
